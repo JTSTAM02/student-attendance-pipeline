@@ -1,4 +1,4 @@
-<< 'EOF'
+
 ## What I Built
 - IAM role: glue-attendance-role
 - Glue database: attendance_glue_db
@@ -20,5 +20,4 @@ SELECT
     ROUND(SUM(present) * 100.0 / SUM(enrolled), 1) AS ada_pct
 FROM attendance_glue_db.attendance
 GROUP BY school_id;
-EOF
 
