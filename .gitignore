@@ -1,0 +1,4 @@
+dbt-env/
+attendance_dbt/target
+attendance_dbt/dbt_packages/
+.DS_Store
