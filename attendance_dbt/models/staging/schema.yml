@@ -1,0 +1,32 @@
+version: 2
+
+models:
+  - name: stg_attendance
+    description: "Cleaned and typed attendance records from raw source"
+    columns:
+      - name: student_id
+        description: "Unique student identifier"
+        tests:
+          - not_null
+      - name: school_id
+        description: "Unique school identifier"
+        tests:
+          - not_null
+      - name: attendance_date
+        description: "Date of attendance record"
+        tests:
+          - not_null
+      - name: is_present
+        description: "1 if present, 0 if absent"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [0, 1]
+              quote: false
+      - name: is_enrolled
+        description: "1 if enrolled, 0 if not"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [0, 1]
+              quote: false

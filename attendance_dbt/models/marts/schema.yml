@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: mart_ada
+    description: "Average Daily Attendance by school"
+    columns:
+      - name: school_id
+        description: "Unique school identifier"
+        tests:
+          - not_null
+          - unique
+      - name: ada_pct
+        description: "ADA percentage, should always be between 0 and 100"
+        tests:
+          - not_null
+
+  - name: mart_adm
+    description: "Average Daily Membership by school"
+    columns:
+      - name: school_id
+        description: "Unique school identifier"
+        tests:
+          - not_null
+          - unique
+
+  - name: mart_truancy
+    description: "Truancy and chronic absenteeism by student"
+    columns:
+      - name: student_id
+        description: "Unique student identifier"
+        tests:
+          - not_null
+      - name: absence_rate_pct
+        description: "Absence rate percentage"
+        tests:
+          - not_null
