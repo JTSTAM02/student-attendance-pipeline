@@ -2,35 +2,92 @@ version: 2
 
 models:
   - name: mart_ada
-    description: "Average Daily Attendance by school"
+    description: "
+      Average Daily Attendance (ADA) by school.
+      ADA is the primary attendance metric used by school districts
+      and is often directly tied to state funding calculations.
+      Formula: total days present / total days enrolled * 100.
+    "
     columns:
       - name: school_id
-        description: "Unique school identifier"
+        description: "Unique identifier for each school."
         tests:
           - not_null
           - unique
+      - name: total_days
+        description: "Total distinct calendar days in the reporting period."
+        tests:
+          - not_null
+      - name: total_days_present
+        description: "Total days students were present across all students."
+        tests:
+          - not_null
+      - name: total_days_enrolled
+        description: "Total days students were enrolled across all students."
+        tests:
+          - not_null
       - name: ada_pct
-        description: "ADA percentage, should always be between 0 and 100"
+        description: "ADA percentage. Should always be between 0 and 100."
         tests:
           - not_null
 
   - name: mart_adm
-    description: "Average Daily Membership by school"
+    description: "
+      Average Daily Membership (ADM) by school.
+      ADM measures the average number of students enrolled per day.
+      Used alongside ADA to understand enrollment trends vs attendance trends.
+    "
     columns:
       - name: school_id
-        description: "Unique school identifier"
+        description: "Unique identifier for each school."
         tests:
           - not_null
           - unique
+      - name: total_days
+        description: "Total distinct calendar days in the reporting period."
+        tests:
+          - not_null
+      - name: avg_daily_membership
+        description: "Average number of students enrolled per day."
+        tests:
+          - not_null
+      - name: avg_daily_attendance
+        description: "Average number of students present per day."
+        tests:
+          - not_null
 
   - name: mart_truancy
-    description: "Truancy and chronic absenteeism by student"
+    description: "
+      Truancy days and chronic absenteeism by student and school.
+      A student is considered chronically absent if they miss
+      10% or more of enrolled days, per federal reporting standards.
+    "
     columns:
       - name: student_id
-        description: "Unique student identifier"
+        description: "Unique identifier for each student."
+        tests:
+          - not_null
+      - name: school_id
+        description: "Unique identifier for each school."
+        tests:
+          - not_null
+      - name: total_absences
+        description: "Total number of days the student was absent."
+        tests:
+          - not_null
+      - name: total_truancy_days
+        description: "Total number of truant days for the student."
+        tests:
+          - not_null
+      - name: total_days_enrolled
+        description: "Total days the student was enrolled."
         tests:
           - not_null
       - name: absence_rate_pct
-        description: "Absence rate percentage"
+        description: "Absence rate as a percentage of enrolled days."
+        tests:
+          - not_null
+      - name: is_chronically_absent
+        description: "1 if student is chronically absent (10%+ absence rate), 0 otherwise."
         tests:
           - not_null
