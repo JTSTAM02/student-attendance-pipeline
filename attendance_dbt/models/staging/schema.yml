@@ -2,29 +2,35 @@ version: 2
 
 models:
   - name: stg_attendance
-    description: "Cleaned and typed attendance records from raw source"
+    description: "
+      Staging model for raw daily attendance records.
+      One row per student per school per day.
+      Cleans and casts raw source columns to appropriate types.
+      Coalesces nulls in is_present and is_enrolled to prevent
+      downstream metric calculation errors.
+    "
     columns:
       - name: student_id
-        description: "Unique student identifier"
+        description: "Unique identifier for each student. Cast to varchar from source integer."
         tests:
           - not_null
       - name: school_id
-        description: "Unique school identifier"
+        description: "Unique identifier for each school."
         tests:
           - not_null
       - name: attendance_date
-        description: "Date of attendance record"
+        description: "Date of the attendance record. Cast from string to date type."
         tests:
           - not_null
       - name: is_present
-        description: "1 if present, 0 if absent"
+        description: "1 if the student was present that day, 0 if absent. Nulls coalesced to 0."
         tests:
           - not_null
           - accepted_values:
               values: [0, 1]
               quote: false
       - name: is_enrolled
-        description: "1 if enrolled, 0 if not"
+        description: "1 if the student was enrolled that day, 0 if not. Nulls coalesced to 1."
         tests:
           - not_null
           - accepted_values:

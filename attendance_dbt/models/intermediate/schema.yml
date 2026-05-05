@@ -1,0 +1,38 @@
+version: 2
+
+models:
+  - name: int_attendance_daily
+    description: "
+      Intermediate model adding business logic flags to cleaned attendance records.
+      One row per student per school per day.
+      Adds absence and truancy flags used by downstream mart models.
+    "
+    columns:
+      - name: student_id
+        description: "Unique identifier for each student."
+        tests:
+          - not_null
+      - name: school_id
+        description: "Unique identifier for each school."
+        tests:
+          - not_null
+      - name: attendance_date
+        description: "Date of the attendance record."
+        tests:
+          - not_null
+      - name: is_present
+        description: "1 if the student was present, 0 if absent."
+        tests:
+          - not_null
+      - name: is_enrolled
+        description: "1 if the student was enrolled that day."
+        tests:
+          - not_null
+      - name: is_absent
+        description: "1 if the student was absent while enrolled, 0 otherwise."
+        tests:
+          - not_null
+      - name: is_truant
+        description: "1 if the absence is considered truant, 0 otherwise."
+        tests:
+          - not_null
