@@ -1,6 +1,21 @@
+{{
+    config(
+        materialized='incremental',
+	incremental_strategy='insert_overwrite',
+	partitioned_by=['attendance_date']
+	)
+}}
+
 with stg as (
 
     select * from {{ ref('stg_attendance') }}
+
+    {% if is_incremental() %}
+        where attendance_date > (
+            select max(attendance_date)
+            from {{ this }}
+        )
+    {% endif %}
 
 ),
 
@@ -9,7 +24,6 @@ daily as (
     select
         student_id,
         school_id,
-        attendance_date,
         is_present,
         is_enrolled,
 
@@ -20,12 +34,14 @@ daily as (
             else 0
         end as is_absent,
 
-        -- Truancy flag (unexcused absence - for now same as absent)
+        -- Truancy flag
         case
             when is_present = 0 and is_enrolled = 1
             then 1
             else 0
-        end as is_truant
+        end as is_truant,
+
+	attendance_date
 
     from stg
 
