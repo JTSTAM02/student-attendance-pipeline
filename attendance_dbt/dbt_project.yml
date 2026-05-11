@@ -22,3 +22,10 @@ models:
       +materialized: view
     marts:
       +materialized: table
+
+seeds:
+  attendance_dbt:
+    school_calendar_2024:
+      +column_types:
+        date: date
+        is_instructional: integer
