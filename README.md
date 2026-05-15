@@ -25,23 +25,32 @@ Raw CSV → S3 → Glue → Athena → d AWS Lambda + Eventbridge (automated dai
 | Chronic Absenteeism | Students missing 10%+ of enrolled days |
 
 ## dbt Project Structure
+
+```
 attendance_dbt/
 ├── models/
-│   ├── staging/           # Raw data cleaned and typed
+│   ├── staging/                    # Raw data cleaned and typed
 │   │   ├── stg_attendance.sql
 │   │   ├── sources.yml
 │   │   └── schema.yml
-│   ├── intermediate/      # Business logic and flags
+│   ├── intermediate/               # Business logic and flags
 │   │   ├── int_attendance_daily.sql
 │   │   └── schema.yml
-│   └── marts/             # Final metrics for reporting
+│   └── marts/                      # Final metrics for reporting
 │       ├── mart_ada.sql
 │       ├── mart_adm.sql
 │       ├── mart_truancy.sql
+│       ├── exposures.yml
 │       └── schema.yml
-├── tests/
+├── macros/                         # Reusable Jinja SQL functions
+│   ├── attendance_rate.sql
+│   ├── is_chronically_absent.sql
+│   └── absence_flags.sql
+├── tests/                          # Custom singular tests
 │   └── assert_ada_between_0_and_100.sql
+├── packages.yml                    # dbt package dependencies
 └── dbt_project.yml
+```
 
 ## Data Quality
 - 33 automated dbt tests covering null checks,
@@ -108,5 +117,5 @@ dbt build
 
 ## Session Notes
 
-Detailed notes from each build session are in the `/notes` directory,
+Detailed notes from various sessions are in the `/notes` directory,
 documenting key concepts, decisions, and lessons learned.
