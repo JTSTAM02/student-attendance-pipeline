@@ -1,0 +1,19 @@
+# models/marts/exposures.yml
+version: 2
+
+exposures:
+  - name: district_attendance_dashboard
+    type: dashboard
+    maturity: medium
+    description: >
+      Daily attendance metrics for school district administrators.
+      Tracks ADA, ADM, chronic absenteeism, and truancy trends
+      across all schools. Refreshes automatically every morning at 6am.
+
+    depends_on:
+      - ref('mart_ada')
+      - ref('mart_adm')
+      - ref('mart_truancy')
+
+    owner:
+      name: Tyler Stamm

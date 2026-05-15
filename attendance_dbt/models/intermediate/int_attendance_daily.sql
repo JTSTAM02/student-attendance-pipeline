@@ -22,24 +22,14 @@ with stg as (
 daily as (
 
     select
-        student_id,
+        attendance_sk,
+	student_id,
         school_id,
         is_present,
         is_enrolled,
 
-        -- Absenteeism flag
-        case
-            when is_present = 0 and is_enrolled = 1
-            then 1
-            else 0
-        end as is_absent,
-
-        -- Truancy flag
-        case
-            when is_present = 0 and is_enrolled = 1
-            then 1
-            else 0
-        end as is_truant,
+	{{ is_absent_flag('is_present', 'is_enrolled') }} as is_absent,
+	{{ is_truant_flag('is_present', 'is_enrolled') }} as is_truant,
 
 	attendance_date
 

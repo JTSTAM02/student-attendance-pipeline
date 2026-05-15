@@ -21,6 +21,8 @@ with source as (
 renamed as (
 
     select
+	{{ dbt_utils.generate_surrogate_key(['student_id', 'school_id', 'date']) }}
+						as attendance_sk,
         cast(student_id as varchar)             as student_id,
         cast(school_id  as varchar)             as school_id,
         coalesce(cast(present  as integer), 0)  as is_present,
