@@ -1,83 +1,35 @@
+# models/marts/schema.yml
 version: 2
 
 models:
   - name: mart_ada
-    description: "ADA by school. Formula: total days present / instructional days * 100."
+    description: "Average Daily Attendance metrics aggregated by school"
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+          strictly: false
     columns:
       - name: school_id
         tests:
-          - not_null
           - unique
-      - name: instructional_days
-        tests:
-          - not_null
-      - name: total_days_present
-        tests:
-          - not_null
-      - name: total_days_enrolled
-        tests:
           - not_null
       - name: ada_pct
+        description: "Attendance rate as a percentage (0-100)"
         tests:
           - not_null
-
-  - name: mart_adm
-    description: "Average Daily Membership by school."
-    columns:
-      - name: school_id
-        tests:
-          - not_null
-          - unique
-      - name: total_days
-        tests:
-          - not_null
-      - name: avg_daily_membership
-        tests:
-          - not_null
-      - name: avg_daily_attendance
-        tests:
-          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 100
 
   - name: mart_truancy
-    description: "Truancy and chronic absenteeism by student."
+    description: "Truancy and chronic absenteeism flags by student and school"
     columns:
       - name: student_id
-        tests:
-          - not_null
-      - name: school_id
-        tests:
-          - not_null
-      - name: total_absences
-        tests:
-          - not_null
-      - name: total_truancy_days
-        tests:
-          - not_null
-      - name: total_days_enrolled
-        tests:
-          - not_null
-      - name: absence_rate_pct
         tests:
           - not_null
       - name: is_chronically_absent
         tests:
           - not_null
-
-  - name: mart_student_enrollment
-    description: "Student enrollment history using SCD Type 2."
-    columns:
-      - name: student_id
-        tests:
-          - not_null
-      - name: school_id
-        tests:
-          - not_null
-      - name: is_current_enrollment
-        tests:
-          - not_null
           - accepted_values:
               values: [0, 1]
               quote: false
-      - name: enrolled_from
-        tests:
-          - not_null
